@@ -1,0 +1,235 @@
+﻿Las preguntas teóricas ponerlas en un archivo respuestas.txt 
+y ubicarlo dentro del proyecto (pregunta 5), subirlo a github.com.
+
+Incluir en el mismo proyecto un archivo script.sql los comandos 
+para crear la tabla e insertar los datos.
+
+1. Diagramar una clase llamada producto, con sus atributos y operaciones.
+	
+	public class Peliculas {
+    
+    private String nombre;
+    private Date fecha;
+    private String pelicula;
+    private String tipo;
+    private int cantidad;
+    private double precio;
+    private double descuento;
+
+---- FUNCION -------
+public double HallarPrecio(){
+        
+        double precio=0;
+        
+        switch (tipo){
+            case "3D" : precio =20; break;
+            case "Normal" : precio = 11; break;
+            case "HD" : precio = 15; break;
+       }
+        return precio;
+    }
+
+2. ¿Qué es un jar y para qué sirve?
+    Es una extension llena de codigo java que puede usarse en aplicaciones y bases de datos
+
+3. ¿Qué es el patrón MVC?
+        Modelo 
+	vista 
+	controlador
+    son capas o grupos de componentes en los que se
+    organizan las aplicaciones
+
+4. Declarar un array y asignarle valores.
+   char array[];
+   array = new char[20];
+
+   for (int x=0;x<array.length;x++)
+      System.out.printnln(array[x]);
+
+4.1 ¿Cómo se obtiene el primer valor del array?
+     System.out.println(al.get(1));
+
+4.2 ¿y el último?
+     cout << ultimo_elem (array) << endl;
+
+4.3 ¿Con qué estructura de control se itera/recorre un array? de un ejemplo.
+    public class Enhancedforloop
+{
+    public static void main(String args[])
+    {
+        String array[] = {"Rock", "Electronica", "Salsa"};
+ 
+       	for (String x:array)
+        {
+            System.out.println(x);
+        }
+        for (int i = 0; i < array.length; i++)
+        {
+            System.out.println(array[i]);
+        }
+        */
+    }
+}
+
+5. En la empresa Apple Inc. necesitan un software 
+para gestionar sus dispositivos, 
+es necesario hacer un crud de la tabla dispositivo 
+con lo campos, nombre, precio, tipo. 
+Se tiene que mostrar la lista de productos y una opción para registrar, 
+actualizar y borrar dispositivos.
+Usar Procedures para las operaciones CRUD.
+
+------------ CODIGO EN SQL.FILE ------
+
+CREATE TABLE dispositivos (
+nombre VARCHAR (50),
+precio NUMERIC (10),
+tipo VARCHAR (30)
+)
+INSERT INTO dispositivos values ('Celulares',3000,'Iphones');
+INSERT INTO dispositivos values ('Power Bank',200,'Bateria');
+INSERT INTO dispositivos values ('Wireless Headphone',150,'Audifonos');
+INSERT INTO dispositivos values ('Tablet',1500,'IPads');
+INSERT INTO dispositivos values ('Smart Watch',500,'Tecnologia');
+INSERT INTO dispositivos values ('Cables',120,'Accesorios');
+---------------- REGISTRAR
+CREATE PROCEDURE registrar(
+
+IN _p_nombre VARCHAR(30),
+IN _p_precio NUMERIC (6,2),
+OUT _p_tipo INT
+)
+BEGIN
+    DECLARE _dispositivos INT;
+    SET _p_nombre= UPPER (_p_nombre);
+    SET _P_precio=_p_precio*3.5;
+    
+   SELECT FLOOR (1+ RAND()*60) INTO _v_id_prod;
+
+ INSERT INTO dispositivos 
+        (nombre, precio, tipo)
+        VALUES
+        (dispositivos , _p_nombre , _p_precio,_p_tipo);
+ IF ROW_COUNT ()> 0 THEN
+    SET _p_tipo = 1;
+ELSE
+    SET _p_tipo = 0;
+END IF;
+END$$
+DELIMITER ;
+
+-----------ACTUALIZAR
+CREATE PROCEDURE actualizar 
+
+BEGIN
+UPDATE dispositivos SET nombre = nombre,
+precio = precio(),
+tipo = tipo
+
+WHERE dispositivos = dispositivos;
+END
+------- BORRAR
+
+CREATE PROCEDURE borrar 
+IF nombre ('cusp_CustomerDelete') IS NOT NULL
+BEGIN 
+DROP PROCEDURE cusp_CustomerDelete
+END 
+GO
+CREATE PROCEDURE cusp_CustomerDelete 
+    @CustomerID int
+AS 
+BEGIN 
+DELETE
+FROM   Customer
+WHERE  CustomerID = @CustomerID
+ 
+END
+GO
+
+
+
+--------- SOFTWARE JAVA MAIN 
+public class PracticaDelPino {
+
+    public static void main(String[] args, String Nombre) {
+        String practica = "no ok";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String _url = "jdbc:mysql: //localhost/dispositivos?user=root&password=delpino123";
+            Connection connect = DriverManager.getConnection(_url);
+            Statement statement = connect.createStatement();
+            String _query = "Select * from dospositivo";
+            ResultSet resultSet = statement.executeQuery(_query);
+            
+            while (resultSet.next()) {
+                String nombre1 = resultSet.getString("");
+                String tipo1 = resultSet.getString("");
+                int precio1 = resultSet.getInt("precio");
+                System.out.println("Nombre1: " + nombre);
+                System.out.println("precio1 " + precio);
+                System.out.println("tipo1 " + tipo);
+                System.out.println("------------------------\n");
+            }
+
+            Scanner scan = new Scanner(System.in);
+            System.out.println("¿Qué deseas hacer: Registrar / Actualizar / Borrar");
+            String accion = scan.nextLine();
+
+            if (accion.equals("Registrar")) {
+                scan = new Scanner(System.in);
+                System.out.println("Ingresar el Nombre");
+                String idProd = scan.nextLine();
+
+                scan = new Scanner(System.in);
+                System.out.println("Ingresa el Precio");
+                String descProd = scan.nextLine();
+
+                scan = new Scanner(System.in);
+                System.out.println("Ingresa el Tipo");
+                String precio = scan.nextLine();
+                _query = "Insert INTO dispositivos values(?,?,?)";
+                PreparedStatement ps = connect.prepareStatement(_query);
+                ps.setInt(1, Integer.parseInt(Nombre));
+                ps.setString(2, precio);
+                ps.setInt(3, Integer.parseInt(tipo));
+                ps.executeUpdate();
+
+            } else if (accion.equals("Borrar")) {
+                scan = new Scanner(System.in);
+                System.out.println("Ingresa el Nombre");
+                String nombre1 = scan.nextLine();
+                _query = "Delete from dispositivos where nombre = ? ";
+                PreparedStatement ps = connect.prepareCall(_query);
+                ps.setInt(1, Integer.parseInt(idProd));
+                ps.executeUpdate();
+            } else if (accion.equals("Actualizar")) {
+                scan = new Scanner(System.in);
+                System.out.println("Ingresa el Nombre");
+                String idProd = scan.nextLine();
+
+                scan = new Scanner(System.in);
+                System.out.println("Ingresa el Precio");
+                String descProd = scan.nextLine();
+
+                
+
+                scan= new Scanner(System.in);
+                System.err.println("1 Ingresa el precio");
+                  int precio = scan.nextInt();
+                _query= "{call Insert_producto(?, ?)}";
+                CallableStatement stmt = connect.prepareCall(_query);
+                stmt.setString(1, precio);
+                stmt.setInt(2, tipo);
+                stmt.execute();
+                       
+                resultSet.close();
+                statement.close();
+                connect.close();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+  }
+}
